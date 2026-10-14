@@ -1,6 +1,6 @@
 {
   "name": "@stratoscli/stratos",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Orchestrate multiple agents, decision models, and MCP tools with TypeScript workflows.",
   "license": "AGPL-3.0-only",
   "type": "module",
