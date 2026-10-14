@@ -1,0 +1,20 @@
+name: Package Publisher
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+  packages: write
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish with mutable third-party action
+        uses: third-party/publish-action@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}

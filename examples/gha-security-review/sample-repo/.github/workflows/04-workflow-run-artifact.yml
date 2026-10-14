@@ -1,0 +1,35 @@
+name: Artifact Promotion
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_run:
+    workflows: [Artifact Promotion]
+    types: [completed]
+
+permissions:
+  contents: write
+  deployments: write
+
+jobs:
+  build:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: dist/
+
+  deploy:
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+          run-id: ${{ github.event.workflow_run.id }}
+      - name: Deploy downloaded artifact
+        run: ./deploy.sh dist/

@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "codex": {
+    "providers": {
+      "openai": "openai",
+      "azure": "azure",
+      "ollama": "stratos-ollama"
+    }
+  },
+  "claude": {
+    "backendFlags": [
+      "CLAUDE_CODE_USE_BEDROCK",
+      "CLAUDE_CODE_USE_VERTEX",
+      "CLAUDE_CODE_USE_FOUNDRY",
+      "CLAUDE_CODE_USE_ANTHROPIC_AWS",
+      "CLAUDE_CODE_USE_MANTLE"
+    ],
+    "providers": {
+      "anthropic": { "env": {} },
+      "amazon-bedrock": { "env": { "CLAUDE_CODE_USE_BEDROCK": "1" } },
+      "google-vertex-anthropic": { "env": { "CLAUDE_CODE_USE_VERTEX": "1" } }
+    }
+  }
+}

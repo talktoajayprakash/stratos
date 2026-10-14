@@ -1,0 +1,41 @@
+name: gha-security-review
+shortDescription: >-
+  Review a local repository's GitHub Actions workflows for six externally
+  exploitable security patterns. Use for a focused CI review, not a complete
+  repository security audit.
+longDescription: |
+  ## Inputs and prerequisites
+
+  Supply repoDir as a path to a local clone; relative paths resolve from the
+  invocation directory. Requires JEV_API_KEY and the declared yaml dependency.
+
+  ## Behavior and results
+
+  Reads .github/workflows YAML files without contacting GitHub or executing
+  their jobs. Sends candidate files to Jev for confirmation, with one paid
+  request per flagged file; only review repositories authorized for that service.
+  Returns findings sorted by file and line, with class, severity and explanation.
+
+  ## Limitations and retries
+
+  Covers six fixed scanner patterns, not a complete security audit. Jev can
+  reject scanner candidates but cannot add findings; empty output does not
+  prove safety. Provider failures propagate without unconfirmed fallback results.
+  Re-running repeats requests and costs. Local logs and configured traces are
+  written; review their contents before sharing.
+
+  ## Example
+
+  From examples/, use {"repoDir":"gha-security-review/sample-repo"} for the
+  bundled fixture. Run this workflow by directory path because the example
+  is outside automatic .stratos/workflows discovery.
+version: "1"
+decision:
+  triage:
+    model: jev-1.13.0
+    apiKey: "{env:JEV_API_KEY}"
+otel:
+  traces:
+    exporter:
+      type: file
+      path: traces

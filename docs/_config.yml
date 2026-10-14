@@ -1,0 +1,72 @@
+title: Stratos
+description: Compose agents, tools, and structured decisions into reusable workflows.
+url: https://talktoajayprakash.github.io
+baseurl: /stratos
+repository: talktoajayprakash/stratos
+source_branch: main
+theme: jekyll-theme-primer
+plugins:
+  - jekyll-relative-links
+  - jekyll-titles-from-headings
+relative_links:
+  enabled: true
+  collections: false
+readme_index:
+  enabled: false
+titles_from_headings:
+  enabled: true
+  strip_title: false
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  toc_levels: 2..3
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+  - scope:
+      path: docs/reference/CLI.md
+    values:
+      title: CLI reference
+      permalink: /cli/
+  - scope:
+      path: docs/reference/RUNTIME.md
+    values:
+      title: Workflow and agent runtime
+      permalink: /runtime/
+  - scope:
+      path: docs/reference/SPEC.md
+    values:
+      title: Specification
+      permalink: /specification/
+  - scope:
+      path: docs/reference/DECISION.md
+    values:
+      title: Decision API
+      permalink: /decision/
+  - scope:
+      path: docs/reference/TELEMETRY.md
+    values:
+      title: Telemetry
+      permalink: /telemetry/
+  - scope:
+      path: DESIGN_PHILOSOPHY.md
+    values:
+      title: Design philosophy
+      permalink: /design/
+  - scope:
+      path: VISION.md
+    values:
+      title: Vision
+      permalink: /vision/
+  - scope:
+      path: CONTRIBUTING.md
+    values:
+      title: Contributing
+      permalink: /contributing/
+  - scope:
+      path: examples/gha-security-review/README.md
+    values:
+      title: GitHub Actions security review example
+      permalink: /examples/gha-security-review/

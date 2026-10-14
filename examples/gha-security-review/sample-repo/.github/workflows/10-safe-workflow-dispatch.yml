@@ -1,0 +1,18 @@
+name: Manual Release Notes
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Tag to publish
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  notes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Manual-only input is outside external attacker model
+        run: echo "Preparing notes for ${{ github.event.inputs.tag }}"

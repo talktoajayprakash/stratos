@@ -1,0 +1,17 @@
+name: PR Summary
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+permissions:
+  contents: read
+
+jobs:
+  summarize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Write PR metadata
+        run: |
+          echo "Title: ${{ github.event.pull_request.title }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Branch: ${{ github.head_ref }}" >> branch.txt

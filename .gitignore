@@ -1,0 +1,9 @@
+.DS_Store
+.env
+/.github/copilot/
+/node_modules/
+/dist/
+/coverage/
+/.pages-source/
+/.pages-site/
+/*.tgz

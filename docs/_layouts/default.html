@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0e0e10">
+    <title>{{ page.title | escape }} | {{ site.title | escape }}</title>
+    <meta name="description" content="{{ page.description | default: site.description | escape }}">
+    <link rel="stylesheet" href="{{ '/assets/style.css' | relative_url }}">
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header">
+      <a class="site-name" href="{{ '/' | relative_url }}">
+        <img class="site-logo" src="{{ '/assets/brand/stratos-icon.svg' | relative_url }}" width="48" height="48" alt="">
+        {{ site.title }}
+      </a>
+      <span>Stratos documentation</span>
+      <a href="https://github.com/{{ site.repository }}">GitHub</a>
+    </header>
+    <div class="site-shell">
+      <nav class="site-nav" aria-label="Documentation">
+        {% for group in site.data.navigation %}
+        <section>
+          <h2>{{ group.title | escape }}</h2>
+          <ul>
+            {% for item in group.links %}
+            <li>
+              <a href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title | escape }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endfor %}
+      </nav>
+      <div class="page">
+        <main id="content" class="markdown-body" tabindex="-1">
+          {{ content }}
+        </main>
+        <footer class="site-footer">
+          <a href="https://github.com/{{ site.repository }}/blob/{{ site.source_branch }}/{{ page.path }}">View this page on GitHub</a>
+          <span>Stratos &middot; AGPL-3.0-only</span>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>

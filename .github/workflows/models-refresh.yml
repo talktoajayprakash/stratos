@@ -1,0 +1,84 @@
+name: Models catalog refresh
+
+on:
+  schedule:
+    - cron: '23 7 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: models-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Refresh Models.dev mapping
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      BASE: main
+      BRANCH: automation/models-refresh
+      SNAPSHOT: data/models/model-mapping.v1.json
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Regenerate snapshot from latest Models.dev
+        id: generate
+        run: |
+          src="$RUNNER_TEMP/models.dev"
+          git clone --quiet --depth 1 https://github.com/anomalyco/models.dev.git "$src"
+          commit="$(git -C "$src" rev-parse HEAD)"
+          npm run models:generate -- --repo "$src" --commit "$commit" --output "$SNAPSHOT"
+          if cmp -s <(git show "HEAD:$SNAPSHOT" | jq -S 'del(.source)') <(jq -S 'del(.source)' "$SNAPSHOT"); then
+            echo "No mapping changes at models.dev $commit."
+            git checkout -- "$SNAPSHOT"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+      - name: Google JavaScript and TypeScript style
+        if: steps.generate.outputs.changed == 'true'
+        run: npm run lint
+      - name: Unit and integration tests with coverage
+        if: steps.generate.outputs.changed == 'true'
+        run: npm test
+      - name: Open or update pull request
+        if: steps.generate.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMIT: ${{ steps.generate.outputs.commit }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="chore(models): refresh Models.dev mapping to ${COMMIT:0:7}"
+          body="Regenerated \`$SNAPSHOT\` from [anomalyco/models.dev@${COMMIT:0:7}](https://github.com/anomalyco/models.dev/commit/$COMMIT).
+
+          Lint and tests passed in the [refresh run]($RUN_URL). Review the mapping changes before merging."
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "$BRANCH"
+          git add "$SNAPSHOT"
+          git commit --quiet -m "$title"
+          auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" \
+            push --force origin "HEAD:refs/heads/$BRANCH"
+          pr="$(gh pr list --base "$BASE" --head "$BRANCH" --state open --json number --jq '.[0].number')"
+          if [ -n "$pr" ]; then
+            gh pr edit "$pr" --title "$title" --body "$body"
+          else
+            gh pr create --base "$BASE" --head "$BRANCH" --title "$title" --body "$body"
+          fi

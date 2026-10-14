@@ -1,0 +1,32 @@
+- title: Documentation
+  links:
+    - title: Overview
+      url: /
+    - title: Getting started
+      url: /getting-started/
+    - title: Author a workflow
+      url: /authoring/
+    - title: Primitives
+      url: /primitives/
+    - title: CLI usage
+      url: /cli/
+    - title: Telemetry
+      url: /telemetry/
+    - title: Runtime
+      url: /runtime/
+    - title: Specification
+      url: /specification/
+- title: Examples
+  links:
+    - title: Composition examples
+      url: /guides/composition/
+    - title: GitHub Actions security review
+      url: /examples/gha-security-review/
+- title: Project
+  links:
+    - title: Vision
+      url: /vision/
+    - title: Design philosophy
+      url: /design/
+    - title: Contributing
+      url: /contributing/

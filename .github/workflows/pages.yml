@@ -1,0 +1,72 @@
+name: Documentation
+
+on:
+  pull_request:
+    paths:
+      - "*.md"
+      - "docs/**"
+      - "assets/brand/stratos-icon.svg"
+      - "skills/stratos-workflows/**"
+      - "examples/**/README.md"
+      - "scripts/docs/**"
+      - "test/unit/docs.test.ts"
+      - ".github/workflows/pages.yml"
+  push:
+    branches: [main]
+    paths:
+      - "*.md"
+      - "docs/**"
+      - "assets/brand/stratos-icon.svg"
+      - "skills/stratos-workflows/**"
+      - "examples/**/README.md"
+      - "scripts/docs/**"
+      - "test/unit/docs.test.ts"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - name: Prepare the public documentation allowlist
+        run: node scripts/docs/prepare.mjs .pages-source
+      - name: Build the site
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: .pages-source
+          destination: .pages-site
+      - name: Check rendered links
+        run: node scripts/docs/check.mjs .pages-site /stratos
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .pages-site
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.PAGES_ENABLED == 'true'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

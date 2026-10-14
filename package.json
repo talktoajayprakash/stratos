@@ -1,0 +1,100 @@
+{
+  "name": "@stratoscli/stratos",
+  "version": "0.0.1",
+  "description": "Orchestrate multiple agents, decision models, and MCP tools with TypeScript workflows.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "prettier": "gts/.prettierrc.json",
+  "lint-staged": {
+    "*.{js,mjs,cjs,ts}": "eslint --fix --max-warnings 0 --no-warn-ignored"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "bin": {
+    "stratos": "dist/src/cli/main.js",
+    "st": "dist/src/cli/main.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./internal/runtime": {
+      "types": "./dist/src/workflows/runtime.d.ts",
+      "import": "./dist/src/workflows/runtime.js"
+    }
+  },
+  "files": [
+    "dist/src/**/*.js",
+    "dist/src/**/*.d.ts",
+    "src/",
+    "scripts/models/",
+    "test/unit/",
+    "test/integration/",
+    "test/helpers/",
+    "data/models/",
+    "skills/stratos-workflows/"
+  ],
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:staged": "lint-staged",
+    "prepare": "husky",
+    "build": "tsc --target ES2022 --module NodeNext --types node --strict --noUncheckedIndexedAccess --noEmitOnError --declaration --outDir dist --rootDir . src/index.ts src/agents/*.ts src/agents/claude/*.ts src/agents/codex/*.ts src/agents/opencode/*.ts src/cli/*.ts src/workflows/*.ts src/models/*.ts src/mcp/*.ts scripts/models/*.ts test/unit/*.ts test/integration/*.ts",
+    "test": "npm run build && node --test --experimental-test-coverage --test-coverage-include='dist/src/**' --test-coverage-include='dist/scripts/**' dist/test/unit/*.test.js dist/test/integration/*.test.js",
+    "prepack": "npm run build",
+    "models:generate": "npm run build && node dist/scripts/models/generate.js",
+    "models:verify": "npm run models:generate -- --check",
+    "test:agents:claude": "npm run build && STRATOS_TEST_AGENT_HOOKS=claude node --test dist/test/integration/agent-live-hooks.test.js",
+    "test:agents:codex": "npm run build && STRATOS_TEST_AGENT_HOOKS=codex node --test dist/test/integration/agent-live-hooks.test.js",
+    "test:agents:opencode": "npm run build && STRATOS_TEST_AGENT_HOOKS=opencode node --test dist/test/integration/agent-live-hooks.test.js",
+    "test:agents:mcp": "npm run build && STRATOS_TEST_AGENT_MCP=1 node --test dist/test/integration/agent-live-mcp.test.js"
+  },
+  "devDependencies": {
+    "eslint": "9.39.5",
+    "eslint-plugin-import-x": "4.17.1",
+    "globals": "17.13.0",
+    "gts": "7.0.0",
+    "husky": "9.1.7",
+    "lint-staged": "17.6.0",
+    "typescript": "npm:@typescript/typescript6@6.0.2"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "0.3.281",
+    "@babel/parser": "7.29.9",
+    "@grpc/grpc-js": "1.14.5",
+    "@modelcontextprotocol/client": "2.3.1",
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "@openai/codex-sdk": "0.157.1",
+    "@opencode-ai/sdk": "1.4.3",
+    "@opentelemetry/api": "1.9.0",
+    "@opentelemetry/exporter-trace-otlp-grpc": "0.219.0",
+    "@opentelemetry/exporter-trace-otlp-http": "0.219.0",
+    "@opentelemetry/exporter-trace-otlp-proto": "0.219.0",
+    "@opentelemetry/otlp-transformer": "0.219.0",
+    "@opentelemetry/sdk-trace-base": "2.8.0",
+    "@types/fs-ext": "2.0.3",
+    "@types/node": "24.19.0",
+    "@typescript/native": "npm:typescript@7.0.2",
+    "fs-ext": "2.1.1",
+    "handlebars": "4.7.10",
+    "json-schema-to-typescript": "16.0.0",
+    "smol-toml": "1.9.0",
+    "yaml": "2.8.3",
+    "zod": "4.6.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/talktoajayprakash/stratos.git"
+  },
+  "homepage": "https://github.com/talktoajayprakash/stratos#readme",
+  "bugs": {
+    "url": "https://github.com/talktoajayprakash/stratos/issues"
+  },
+  "overrides": {
+    "gts": {
+      "tmp": "0.2.7"
+    }
+  }
+}
