@@ -5,8 +5,8 @@
 **A framework for agents to build, run, and improve TypeScript workflows.**
 
 [![CI](https://img.shields.io/github/actions/workflow/status/talktoajayprakash/stratos/ci.yml?branch=main&logo=github&label=CI)](https://github.com/talktoajayprakash/stratos/actions/workflows/ci.yml)
-[![release](https://img.shields.io/github/v/release/talktoajayprakash/stratos)](https://github.com/talktoajayprakash/stratos/releases)
-[![license](https://img.shields.io/github/license/talktoajayprakash/stratos)](LICENSE)
+[![release](https://img.shields.io/github/v/release/talktoajayprakash/stratos?color=blue)](https://github.com/talktoajayprakash/stratos/releases)
+[![license](https://img.shields.io/github/license/talktoajayprakash/stratos?color=blue)](LICENSE)
 
 Stratos brings **agents, MCP tools, and decision models such as Jev and Clef**
 together as first-class workflow primitives.
