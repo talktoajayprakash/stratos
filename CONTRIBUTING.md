@@ -229,9 +229,10 @@ follow [Conventional Commits](https://www.conventionalcommits.org/):
 `PR title` workflow enforces this; commits inside a PR are not checked.
 
 [release-please](https://github.com/googleapis/release-please) keeps one open
-release PR that collects these titles. Before 1.0, `feat` and `fix` bump the
-patch version and a breaking change (`!` or a `BREAKING CHANGE:` footer) bumps
-the minor version; other types do not start a release. Before merging the
+release PR that collects these titles. Before 1.0, `feat`, `fix`, `perf` and
+`revert` bump the patch version and a breaking change (`!` or a
+`BREAKING CHANGE:` footer) bumps the minor version; other types do not start a
+release. Before merging the
 release PR, run the manual CI workflow on `main`. Merging it updates
 `package.json`, `package-lock.json` and `CHANGELOG.md`, tags `vX.Y.Z`, creates
 the GitHub release and publishes to npm with provenance.
