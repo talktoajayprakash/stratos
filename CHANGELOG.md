@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.3](https://github.com/talktoajayprakash/stratos/compare/v0.0.2...v0.0.3) (2026-10-15)
+
+
+### Miscellaneous Chores
+
+* release 0.0.3 ([#7](https://github.com/talktoajayprakash/stratos/issues/7)) ([dcab0e8](https://github.com/talktoajayprakash/stratos/commit/dcab0e811a154776d7a7e6b76f786b5536e7a7f2))
+
 ## [0.0.2](https://github.com/talktoajayprakash/stratos/compare/v0.0.1...v0.0.2) (2026-10-15)
 
 
