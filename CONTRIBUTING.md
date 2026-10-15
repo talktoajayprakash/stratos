@@ -220,6 +220,28 @@ npm downloads are cached, and jobs time out after 30 minutes. Ordinary CI does
 not run paid-provider or credentialed remote checks; do not expose credentials
 to untrusted contributor code.
 
+## Pull requests and releases
+
+PRs are squash-merged, so each PR title becomes one commit on `main`. Titles
+follow [Conventional Commits](https://www.conventionalcommits.org/):
+`<type>[(scope)][!]: <summary>`, where type is `feat`, `fix`, `docs`, `style`,
+`refactor`, `perf`, `test`, `build`, `ci`, `chore`, or `revert`. The
+`PR title` workflow enforces this; commits inside a PR are not checked.
+
+[release-please](https://github.com/googleapis/release-please) keeps one open
+release PR that collects these titles. Before 1.0, `feat` and `fix` bump the
+patch version and a breaking change (`!` or a `BREAKING CHANGE:` footer) bumps
+the minor version; other types do not start a release. Before merging the
+release PR, run the manual CI workflow on `main`. Merging it updates
+`package.json`, `package-lock.json` and `CHANGELOG.md`, tags `vX.Y.Z`, creates
+the GitHub release and publishes to npm with provenance.
+
+The `Release` workflow requires two maintainer settings. The
+`RELEASE_PLEASE_TOKEN` secret is a fine-grained personal access token for this
+repository with read/write Contents, Issues and Pull requests permissions, so
+the release PR triggers CI. npm trusts `release-please.yml` in this repository
+as the publisher of `@stratoscli/stratos`; no npm token is stored.
+
 ## Documentation site
 
 The GitHub Pages site has reader-facing guides in `docs/`, detailed references
