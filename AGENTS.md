@@ -28,6 +28,12 @@ The user owns all architecture and design decisions, including which design idea
 - Keep durable regression tests and their necessary fixtures in the existing test suite. Tests that create files or processes must clean up their owned resources on success and failure.
 - Preserve pre-existing tooling, user data, credentials, and explicitly requested local services; cleanup is limited to artifacts owned by the task.
 
+## Pull requests
+
+- Title every PR `<type>[(scope)][!]: <summary>`, for example `fix(mcp): retry token refresh after a 401`. PRs are squash-merged, so the title becomes the commit on `main` that release-please reads, and the `PR title` check rejects other formats. See [pull requests and releases](CONTRIBUTING.md#pull-requests-and-releases).
+- Choose the type by the change's effect on users: `feat` (new capability), `fix` (bug fix), `perf` (performance), and `revert` start a release; `docs`, `style`, `refactor`, `test`, `build`, `ci`, and `chore` do not.
+- Scope is optional and lowercase. Add `!` before the colon only for a breaking change.
+
 ## Specifications and implementation
 
 - Keep workflow-authoring syntax, configuration, and primitives straightforward for capable coding models given the right context. Different models, including smaller local models, can be used inside workflows. This does not require special support for every model or authorize independently redesigning APIs.
